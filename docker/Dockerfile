@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:18.04
 
 ENV hadoop_ver 3.3.0
 ENV hadoop_url https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
@@ -13,6 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install OpenJDK 8
 RUN apt-get update && \
+    apt-get clean && \
     apt-get install -y apt-utils curl wget openjdk-8-jdk python3-pip python-dev build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
