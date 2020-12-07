@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM alpine:3.7
 
 ENV hadoop_ver 3.3.0
 ENV hadoop_url https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
@@ -8,20 +8,22 @@ ENV spark_ver 3.0.1
 ENV spark_url https://downloads.apache.org/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
 ENV spark_file spark-3.0.1-bin-hadoop3.2
 
-# neceary to supress dialog on apt-get install
-ENV DEBIAN_FRONTEND=noninteractive 
+ 
 
 # Install OpenJDK 8
-RUN apt-get update && \
-    apt-get clean && \
-    apt-get install -y apt-utils curl wget openjdk-8-jdk python3-pip python-dev build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --update \
+    python3 \
+    python3-dev \
+    py-pip \
+    build-base \
+    openjdk8-jre \
+    bash \
+  && rm -rf /var/cache/apk/*
 
 # Download Hadoop and install it in /opt/hadoop
 RUN mkdir -p /opt && \
     cd /opt && \
-    wget ${hadoop_url} && \
+    wget --quiet ${hadoop_url} && \
     tar -xf ${hadoop_file}.tar.gz && \
     ln -s ${hadoop_file} hadoop && \
     rm ${hadoop_file}.tar.gz && \
